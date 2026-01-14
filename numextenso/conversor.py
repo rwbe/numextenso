@@ -16,6 +16,7 @@ from .constantes import (
     CENTENAS,
     CLASSES,
     DEZENAS,
+    MOEDA_BRL,
     UNIDADES,
 )
 
@@ -162,3 +163,57 @@ def por_extenso(numero: int | float, aceitar_decimal: bool = False) -> str:
                 resultado.append(", ")
 
     return "".join(resultado)
+
+
+def por_extenso_moeda(valor: float | int, moeda: dict = None) -> str:
+    """
+    Converte um valor monetário em extenso.
+
+    Parâmetros:
+        valor: O valor a ser convertido (ex: 1234.56)
+        moeda: Dicionário com nomes da moeda (opcional, padrão é BRL)
+
+    Retorna:
+        String com o valor por extenso
+
+    Exemplos:
+        >>> por_extenso_moeda(1)
+        'um real'
+        >>> por_extenso_moeda(1234.56)
+        'mil duzentos e trinta e quatro reais e cinquenta e seis centavos'
+        >>> por_extenso_moeda(0.01)
+        'um centavo'
+    """
+    if moeda is None:
+        moeda = MOEDA_BRL
+
+    if not isinstance(valor, (int, float)):
+        raise TypeError(f"Esperava int ou float, recebi {type(valor).__name__}")
+
+    if valor < 0:
+        return f"menos {por_extenso_moeda(abs(valor), moeda)}"
+
+    # Separa inteiros e centavos
+    # Usa round pra evitar problemas de ponto flutuante (0.1 + 0.2 = 0.30000000004)
+    valor_cents = round(valor * 100)
+    inteiros = valor_cents // 100
+    centavos = valor_cents % 100
+
+    partes = []
+
+    # Parte inteira
+    if inteiros > 0:
+        texto_inteiro = por_extenso(inteiros)
+        nome_moeda = moeda["inteiro_plural"] if inteiros > 1 else moeda["inteiro_singular"]
+        partes.append(f"{texto_inteiro} {nome_moeda}")
+
+    # Centavos
+    if centavos > 0:
+        texto_centavos = por_extenso(centavos)
+        nome_centavos = moeda["decimal_plural"] if centavos > 1 else moeda["decimal_singular"]
+        partes.append(f"{texto_centavos} {nome_centavos}")
+
+    if not partes:
+        return f"zero {moeda['inteiro_plural']}"
+
+    return " e ".join(partes)
