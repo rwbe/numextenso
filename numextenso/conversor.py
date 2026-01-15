@@ -17,6 +17,8 @@ from .constantes import (
     CLASSES,
     DEZENAS,
     MOEDA_BRL,
+    ORDINAIS_FEMININO,
+    ORDINAIS_MASCULINO,
     UNIDADES,
 )
 
@@ -217,3 +219,56 @@ def por_extenso_moeda(valor: float | int, moeda: dict = None) -> str:
         return f"zero {moeda['inteiro_plural']}"
 
     return " e ".join(partes)
+
+
+def por_extenso_ordinal(numero: int, feminino: bool = False) -> str:
+    """
+    Converte um número em ordinal por extenso.
+
+    Parâmetros:
+        numero: O número a ser convertido (1-1000)
+        feminino: Se True, usa forma feminina (primeira, segunda...)
+
+    Retorna:
+        String com o ordinal por extenso
+
+    Exemplos:
+        >>> por_extenso_ordinal(1)
+        'primeiro'
+        >>> por_extenso_ordinal(1, feminino=True)
+        'primeira'
+        >>> por_extenso_ordinal(42)
+        'quadragésimo segundo'
+    """
+    if not isinstance(numero, int):
+        raise TypeError(f"Ordinais só funcionam com inteiros, recebi {type(numero).__name__}")
+
+    if numero < 1 or numero > 1000:
+        raise ValueError("Ordinais suportados de 1 a 1000")
+
+    tabela = ORDINAIS_FEMININO if feminino else ORDINAIS_MASCULINO
+
+    # Caso direto na tabela
+    if numero in tabela:
+        return tabela[numero]
+
+    # Decompõe o número
+    partes = []
+
+    # Centenas
+    if numero >= 100:
+        centena = (numero // 100) * 100
+        partes.append(tabela[centena])
+        numero = numero % 100
+
+    # Dezenas
+    if numero >= 20:
+        dezena = (numero // 10) * 10
+        partes.append(tabela[dezena])
+        numero = numero % 10
+
+    # Unidades (ou 11-19)
+    if numero > 0:
+        partes.append(tabela[numero])
+
+    return " ".join(partes)
