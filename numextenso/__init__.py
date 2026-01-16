@@ -7,6 +7,6 @@ precisa escrever o valor por extenso.
 
 from .conversor import por_extenso, por_extenso_moeda, por_extenso_ordinal
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __author__ = "Ricardo Willian"
 __all__ = ["por_extenso", "por_extenso_moeda", "por_extenso_ordinal"]
