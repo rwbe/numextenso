@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "numextenso"
+version = "1.0.0"
+description = "Converte números em extenso em português brasileiro"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Ricardo Willian", email = "rwbemiliano@gmail.com"}
+]
+keywords = [
+    "números", "extenso", "português", "brasil", "converter",
+    "numbers", "words", "portuguese", "brazilian"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+gui = [
+    "customtkinter>=5.0",
+]
+
+[project.scripts]
+numextenso = "numextenso.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/rwbe/numextenso"
+Repository = "https://github.com/rwbe/numextenso"
+Issues = "https://github.com/rwbe/numextenso/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
